@@ -1,0 +1,8 @@
+Django
+django-staticfiles
+django-extensions
+lizard-ui
+django-nose
+pkginfo
+
+[test]

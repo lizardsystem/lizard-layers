@@ -1,0 +1,41 @@
+Metadata-Version: 1.0
+Name: lizard-layers
+Version: 0.1dev
+Summary: TODO
+Home-page: UNKNOWN
+Author: TODO
+Author-email: TODO@nelen-schuurmans.nl
+License: GPL
+Description: lizard-layers
+        ==========================================
+        
+        Introduction
+        
+        Usage, etc.
+        
+        
+        
+        TODO
+        ====
+        
+        - Probably a whole lot of things.
+        
+        
+        Credits
+        =======
+        
+        - TODO started this library
+        
+        
+        Changelog of lizard-layers
+        ===================================================
+        
+        
+        0.1 (unreleased)
+        ----------------
+        
+        - Initial library skeleton created by nensskel.  [your name]
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Classifier: Framework :: Django
