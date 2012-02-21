@@ -1,8 +1,14 @@
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 from django.conf import settings
-from django.conf.urls.defaults import *
+
+from django.conf.urls.defaults import url
+from django.conf.urls.defaults import include
+from django.conf.urls.defaults import patterns
+
 from django.contrib import admin
 from django.views.defaults import page_not_found, server_error
+
+from lizard_layers.views import geoserver_layer
 
 
 admin.autodiscover()
@@ -10,6 +16,10 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     (r'^admin/', include(admin.site.urls)),
+    url(r'^wms/$',
+      'lizard_layers.views.geoserver_layer',
+      {},
+      "lizard_layers.geoserver_layer"),
     )
 
 
