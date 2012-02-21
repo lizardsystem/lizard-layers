@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.1 (unreleased)
+0.1 (2012-02-21)
 ----------------
 
 - Initial library skeleton created by nensskel.
