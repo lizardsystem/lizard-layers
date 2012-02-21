@@ -5,7 +5,7 @@ Changelog of lizard-layers
 0.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Add MANIFEST.in to make packages actually work.
 
 
 0.1 (2012-02-21)
