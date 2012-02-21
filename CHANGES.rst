@@ -9,3 +9,5 @@ Changelog of lizard-layers
 
 - Add wms view that adds cql filter based on user
   permissions (see lizard_security)
+
+- Change configuration to make tests work.

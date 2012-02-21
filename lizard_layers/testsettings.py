@@ -1,8 +1,16 @@
-import logging
+import os
+from lizard_ui.settingshelper import setup_logging
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(name)s %(levelname)s %(message)s')
+# SETTINGS_DIR allows media paths and so to be relative to this settings file
+# instead of hardcoded to c:\only\on\my\computer.
+SETTINGS_DIR = os.path.dirname(os.path.realpath(__file__))
+
+# BUILDOUT_DIR is for access to the "surrounding" buildout, for instance for
+# BUILDOUT_DIR/var/static files to give django-staticfiles a proper place
+# to place all collected static files.
+BUILDOUT_DIR = os.path.abspath(os.path.join(SETTINGS_DIR, '..'))
+
+LOGGING = setup_logging(BUILDOUT_DIR)
 
 DEBUG = True
 TEMPLATE_DEBUG = True
