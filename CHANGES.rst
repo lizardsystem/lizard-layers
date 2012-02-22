@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.1.2 (unreleased)
+0.1.2 (2012-02-22)
 ------------------
 
 - Improve buildout config
