@@ -5,7 +5,13 @@ Changelog of lizard-layers
 0.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Improve buildout config
+
+- Change geoserver_layer view to class-based one
+
+- Support multiple layers in geoserver_layer view
+
+- Add some lines in README
 
 
 0.1.1 (2012-02-21)

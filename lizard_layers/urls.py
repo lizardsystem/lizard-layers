@@ -8,7 +8,7 @@ from django.conf.urls.defaults import patterns
 from django.contrib import admin
 from django.views.defaults import page_not_found, server_error
 
-from lizard_layers.views import geoserver_layer
+from lizard_layers.views import GeoserverLayer
 
 
 admin.autodiscover()
@@ -17,9 +17,9 @@ urlpatterns = patterns(
     '',
     (r'^admin/', include(admin.site.urls)),
     url(r'^wms/$',
-      'lizard_layers.views.geoserver_layer',
+      GeoserverLayer.as_view(),
       {},
-      "lizard_layers.geoserver_layer"),
+      'lizard_layers.geoserver_layer'),
     )
 
 
