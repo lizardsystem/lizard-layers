@@ -13,6 +13,8 @@ Changelog of lizard-layers
 
 - Add some lines in README
 
+- Add a test and a doctest
+
 
 0.1.1 (2012-02-21)
 ------------------

@@ -14,6 +14,12 @@ class GeoserverLayer(View):
 
     Meanwhile, add cql filter corresponding to lizard-security rights
     and corresponding to amount of layers requested.
+    
+        >>> from lizard_layers.views import GeoserverLayer
+        >>> gl = GeoserverLayer()
+
+        >>> gl._quoted_get_par('SOME_PAR', 'bla bla')
+        '&SOME_PAR=bla%20bla'
     """
 
     def _multiply_cql_filter(self, cql_filter, amount):
@@ -24,7 +30,7 @@ class GeoserverLayer(View):
 
     def _quoted_get_par(self, name, value):
         """
-        Return get parameter as string with value quoted
+        Return get parameter as string with value quoted.
         """
         return '&' + name + '=' + quote(value)
 
