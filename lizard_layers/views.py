@@ -125,5 +125,4 @@ class GeoserverLayer(View):
         Return layer from geoserver applying security filter.
         """
         url = self._geoserver_url(request)
-        print url
         return self._url_to_response(url)
