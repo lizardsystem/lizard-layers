@@ -28,7 +28,7 @@ DATABASES = {
     # that as an error.
     'default': {
         'NAME': os.path.join(BUILDOUT_DIR, 'var', 'sqlite', 'test.db'),
-        'ENGINE': 'sqlite3',  #'django.contrib.gis.db.backends.postgis',
+        'ENGINE': 'sqlite3',  # 'django.contrib.gis.db.backends.postgis',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',  # empty string for localhost.

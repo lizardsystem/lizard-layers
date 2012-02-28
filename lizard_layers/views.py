@@ -5,7 +5,7 @@ from django.views.generic import View
 from django.http import HttpResponse
 from django.conf import settings
 from urllib2 import urlopen
-from urllib import quote
+from urllib import urlencode
 
 
 class GeoserverLayer(View):
@@ -14,25 +14,13 @@ class GeoserverLayer(View):
 
     Meanwhile, add cql filter corresponding to lizard-security rights
     and corresponding to amount of layers requested.
-    
+
         >>> from lizard_layers.views import GeoserverLayer
         >>> gl = GeoserverLayer()
 
-        >>> gl._quoted_get_par('SOME_PAR', 'bla bla')
-        '&SOME_PAR=bla%20bla'
+        >>> gl._id_set_to_cql(id_set=set([1, 3]))
+        'data_set_id in (1,3)'
     """
-
-    def _multiply_cql_filter(self, cql_filter, amount):
-        """
-        Return string of repeated cql amount times with ';' as separator.
-        """
-        return ';'.join([cql_filter for i in range(amount)])
-
-    def _quoted_get_par(self, name, value):
-        """
-        Return get parameter as string with value quoted.
-        """
-        return '&' + name + '=' + quote(value)
 
     def _id_set_to_cql(self, id_set):
         """
@@ -44,25 +32,16 @@ class GeoserverLayer(View):
 
         return cql
 
-    def _amount_of_layers(self, request):
+    def _multiply_cql_filter(self, cql_filter, amount):
         """
-        Return amount of wms layers requested.
+        Return string of repeated cql amount times with ';' as separator.
         """
-        return len(request.GET.get('LAYERS').split(','))
+        if not cql_filter:
+            return ''
 
-    def _get_pars(self, request):
-        """
-        Return get_pars as string from request.
-        """
-        return request.get_full_path().split('?')[-1]
+        return ';'.join([cql_filter for i in range(amount)])
 
-    def _amount_of_layers(self, request):
-        """
-        Return amount of wms layers requested.
-        """
-        return len(request.GET.get('LAYERS').split(','))
-
-    def _request_to_cql_filter(self, request):
+    def _security_cql(self, request):
         """
         Build cql_filter based on session user and data_set rights.
 
@@ -73,39 +52,40 @@ class GeoserverLayer(View):
             return None
         # Normal users get filtering according to allowed_data_set_ids
         if request.allowed_data_set_ids:
-            return (self._id_set_to_cql(request.allowed_data_set_ids) +
-                   ' or data_set_id is null')
+            return ('(' +
+                    self._id_set_to_cql(request.allowed_data_set_ids) +
+                   ' or data_set_id is null)')
         # Others only see objects without a data_set
         return 'data_set_id is null'
 
     def _geoserver_url(self, request):
         """
-        Return geoserver url.
+        Return geoserver url, extending existing cql filters with
+        with security related cql parameters based on request user.
         """
+        cql_filter_parts = [self._security_cql(request)]
 
-        get_pars = self._get_pars(request)
-        cql_filter = self._request_to_cql_filter(request)
+        getpars = dict([(k.lower(), v) for k, v in request.GET.iteritems()])
 
-        if cql_filter is None:
-            return (settings.GEOSERVER_URL +
-                    '?' + get_pars)
+        if 'cql_filter' in getpars:
+            # If cql_filter is a ';'-separated list, take only the first
+            cql_filter_parts.append(
+                getpars.pop('cql_filter').split(';')[0],
+            )
+
+        cql_filter = ' and '.join(filter(bool, cql_filter_parts))
 
         # If there are more layers, we need more filters
         cql_filters = self._multiply_cql_filter(
-            cql_filter,
-            self._amount_of_layers(request),
+            cql_filter=cql_filter,
+            amount=len(getpars.get('layers').split(',')),
         )
 
-        # The filter part must be quoted
-        cql_par = self._quoted_get_par(
-            'CQL_FILTER', cql_filters
-        )
-        print cql_filters
+        if cql_filters:
+            getpars.update(cql_filter=cql_filters)
 
-        return (settings.GEOSERVER_URL +
-                '?' + self._get_pars(request) +
-                cql_par)
-        
+        return settings.GEOSERVER_URL + '?' + urlencode(getpars)
+
     def _url_to_response(self, url):
         """
         Return django response object retrieved from remote url.

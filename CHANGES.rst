@@ -5,7 +5,7 @@ Changelog of lizard-layers
 0.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Reworked Geoserverlayer view to support already present cql
 
 
 0.1.2 (2012-02-22)

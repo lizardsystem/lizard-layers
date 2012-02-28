@@ -6,7 +6,6 @@ from django.conf.urls.defaults import include
 from django.conf.urls.defaults import patterns
 
 from django.contrib import admin
-from django.views.defaults import page_not_found, server_error
 
 from lizard_layers.views import GeoserverLayer
 
@@ -40,7 +39,9 @@ def handler500(request):
     from django.template import Context, loader
     from django.http import HttpResponseServerError
 
-    t = loader.get_template('500.html') # You need to create a 500.html template.
+    t = loader.get_template(
+        '500.html'
+    )  # You need to create a 500.html template.
     return HttpResponseServerError(t.render(Context({
         'request': request,
     })))
