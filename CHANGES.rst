@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.1.4 (unreleased)
+0.1.4 (2012-02-28)
 ------------------
 
 - Redesigned GeoserverLayer view, to support different styles of
