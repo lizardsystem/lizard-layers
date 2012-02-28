@@ -5,7 +5,8 @@ Changelog of lizard-layers
 0.1.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Redesigned GeoserverLayer view, to support different styles of
+  multiple layer specification in url.
 
 
 0.1.3 (2012-02-28)

@@ -58,33 +58,54 @@ class GeoserverLayer(View):
         # Others only see objects without a data_set
         return 'data_set_id is null'
 
+    def _query_dict_to_dict(self, query_dict):
+        """
+        Return a normal dict.
+
+        
+        """
+
+
     def _geoserver_url(self, request):
         """
         Return geoserver url, extending existing cql filters with
         with security related cql parameters based on request user.
         """
+        GET = request.GET.copy()
+
+        # Don't trust the case layers and cql_filter is in.
+        layer_keys = [k for k in GET if k.lower() == 'layers']
+        cql_keys = [k for k in GET if k.lower() == 'cql_filter']
+
         cql_filter_parts = [self._security_cql(request)]
 
-        getpars = dict([(k.lower(), v) for k, v in request.GET.iteritems()])
-
-        if 'cql_filter' in getpars:
+        if cql_keys:
             # If cql_filter is a ';'-separated list, take only the first
-            cql_filter_parts.append(
-                getpars.pop('cql_filter').split(';')[0],
-            )
+            cql_filter_parts.extend([f.split(';')[0]
+                                     for k in cql_keys
+                                     for f in GET.pop(k)])
 
         cql_filter = ' and '.join(filter(bool, cql_filter_parts))
 
         # If there are more layers, we need more filters
+        amount_of_layers = sum(
+            [len(GET[k].split(',')) for k in layer_keys],
+        )
+
         cql_filters = self._multiply_cql_filter(
             cql_filter=cql_filter,
-            amount=len(getpars.get('layers').split(',')),
+            amount=amount_of_layers,
         )
 
         if cql_filters:
-            getpars.update(cql_filter=cql_filters)
+            GET.update(dict(cql_filter=cql_filters))
 
-        return settings.GEOSERVER_URL + '?' + urlencode(getpars)
+
+        print
+        print GET.urlencode()
+        print
+
+        return settings.GEOSERVER_URL + '?' + GET.urlencode()
 
     def _url_to_response(self, url):
         """
