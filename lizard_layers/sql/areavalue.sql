@@ -140,7 +140,8 @@ CREATE VIEW ekr_vis AS
 (
   SELECT 
     avl."value", 
-    geo.geometry
+    geo.geometry,
+    are.data_set_id
   FROM 
     public.lizard_area_area are, 
     public.lizard_geo_geoobject geo, 
@@ -160,7 +161,8 @@ CREATE VIEW ekr_ovwflora AS
 (
   SELECT 
     avl."value", 
-    geo.geometry
+    geo.geometry,
+    are.data_set_id
   FROM 
     public.lizard_area_area are, 
     public.lizard_geo_geoobject geo, 
@@ -180,7 +182,8 @@ CREATE VIEW ekr_fytopl AS
 (
   SELECT 
     avl."value", 
-    geo.geometry
+    geo.geometry,
+    are.data_set_id
   FROM 
     public.lizard_area_area are, 
     public.lizard_geo_geoobject geo, 
@@ -200,7 +203,8 @@ CREATE VIEW ekr_mafauna AS
 (
   SELECT 
     avl."value", 
-    geo.geometry
+    geo.geometry,
+    are.data_set_id
   FROM 
     public.lizard_area_area are, 
     public.lizard_geo_geoobject geo, 

@@ -7,6 +7,8 @@ Changelog of lizard-layers
 
 - Add models, migrations and sql for geoserver views
 
+- Add management command for syncing ekr layers
+
 
 0.1.4 (2012-02-28)
 ------------------
