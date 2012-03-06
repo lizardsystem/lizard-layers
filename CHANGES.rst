@@ -5,7 +5,7 @@ Changelog of lizard-layers
 0.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add models, migrations and sql for geoserver views
 
 
 0.1.4 (2012-02-28)
