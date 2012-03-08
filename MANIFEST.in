@@ -1,2 +1,2 @@
 include *.rst
-recursive-include lizard_measure *.rst *.py *.html *.css *.js *.jpg *.png *.gif *.pdf
+recursive-include lizard_layers *.rst *.py *.html *.css *.js *.jpg *.png *.gif *.pdf
