@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.1.6 (unreleased)
+0.1.6 (2012-03-08)
 ------------------
 
 - Changed manifest to include files from correct subdir.
