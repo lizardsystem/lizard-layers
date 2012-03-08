@@ -5,7 +5,8 @@ Changelog of lizard-layers
 0.1.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add model and migration for to map ekr values to parameters
+- Have sync_layers use real fews ekr parameters
 
 
 0.1.6 (2012-03-08)

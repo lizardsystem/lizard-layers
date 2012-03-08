@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-06 04:42-0600\n"
+"POT-Creation-Date: 2012-03-08 07:09-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,30 +18,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: models.py:18
+#: models.py:19
 msgid "Name"
 msgstr "Naam"
 
-#: models.py:22 models.py:47
+#: models.py:23 models.py:45 models.py:70 models.py:95
 msgid "Value type"
 msgstr "Type waarde"
 
-#: models.py:23
+#: models.py:24
 msgid "Value types"
 msgstr "Typen waarden"
 
-#: models.py:39
+#: models.py:38
 msgid "Area"
 msgstr "Gebied"
 
-#: models.py:53
+#: models.py:51
 msgid "Value"
 msgstr "Waarde"
 
-#: models.py:57
+#: models.py:55
 msgid "Area value"
 msgstr "Gebiedswaarde"
 
-#: models.py:58
+#: models.py:56
 msgid "Area values"
 msgstr "Gebiedswaarden"
+
+#: models.py:76 models.py:101
+msgid "Parameter"
+msgstr "Parameter"
+
+#: models.py:80 models.py:105
+msgid "Parameter type"
+msgstr "Parameter type"
+
+#: models.py:81 models.py:106
+msgid "Parameter types"
+msgstr "Parameter types"

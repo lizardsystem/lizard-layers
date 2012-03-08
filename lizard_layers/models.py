@@ -6,6 +6,7 @@
 from django.utils.translation import ugettext as _
 from django.contrib.gis.db import models
 from lizard_area.models import Area
+from lizard_fewsnorm.models import ParameterCache
 
 class ValueType(models.Model):
     """
@@ -24,7 +25,6 @@ class ValueType(models.Model):
 
     def __unicode__(self):
         return self.name
-
 
 
 class AreaValue(models.Model):
@@ -59,4 +59,26 @@ class AreaValue(models.Model):
         return '%s - %s' % (self.area, self.value)
 
 
+class ParameterType(models.Model):
+    """
+    Parameter type. To connect fewsparameters to geoserver layers.
+    """
+    value_type = models.ForeignKey(
+        ValueType,
+        null=True,
+        blank=True,
+        verbose_name=_('Value type'),
+    )
+    parameter = models.ForeignKey(
+        ParameterCache,
+        null=True,
+        blank=True,
+        verbose_name=_('Parameter'),
+    )
 
+    class Meta:
+        verbose_name = _('Parameter type')
+        verbose_name_plural = _('Parameter types')
+
+    def __unicode__(self):
+        return '%s - %s' % (self.value_type.name, self.parameter)
