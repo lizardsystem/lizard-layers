@@ -5,6 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
+    depends_on = (
+        ("lizard_area", "0018_auto__add_arealink"),
+    )
 
     def forwards(self, orm):
         

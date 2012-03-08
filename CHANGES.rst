@@ -5,6 +5,8 @@ Changelog of lizard-layers
 0.1.5 (unreleased)
 ------------------
 
+- Add dependency to migration.
+
 - Add models, migrations and sql for geoserver views
 
 - Add management command for syncing ekr layers
