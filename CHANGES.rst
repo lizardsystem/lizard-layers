@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.1.7 (unreleased)
+0.1.7 (2012-03-08)
 ------------------
 
 - Add model and migration for to map ekr values to parameters
