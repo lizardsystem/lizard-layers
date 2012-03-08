@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.1.5 (unreleased)
+0.1.5 (2012-03-08)
 ------------------
 
 - Add dependency to migration.
