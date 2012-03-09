@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.1.8 (unreleased)
+0.1.8 (2012-03-09)
 ------------------
 
 - Add real calculation of judgements.
