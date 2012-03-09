@@ -11,6 +11,8 @@ from lizard_layers.models import AreaValue
 from lizard_layers.models import ValueType
 from lizard_layers.models import ParameterType
 from lizard_fewsnorm.models import TimeSeriesCache
+from lizard_measure.models import MeasuringRod
+from lizard_measure.models import Score
 
 import logging
 logger = logging.getLogger(__name__)
@@ -29,8 +31,44 @@ class Command(BaseCommand):
         area_value.save()
         return created
 
-    def calculate_value_score(self, values):
-        return None  # TODO
+    def _judgements(self, values, area):
+        """
+        Calculate individual judgements.
+        """
+        judgements = []
+        for value in values:
+            # TODO Performance improvement possible here.
+            try:
+                score = Score.objects.get(
+                    measuring_rod=value['parameter_type'].measuring_rod,
+                    area=area,
+                )
+                judgements.append(
+                    score.judgement(
+                        value['value'],
+                        score.target_2015,
+                    )
+                )
+            except Score.DoesNotExist:
+                judgements.append(None)
+        return judgements
+
+    def _overall_judgement(self, judgements):
+        """
+        Return overall judgement.
+        """
+        if None in judgements:
+            return None
+        if (min(judgements) == 1 and
+            len([j for j in judgements if j > 1]) >= 2):
+            return 2
+        if (min(judgements) == 1 and
+            len([j for j in judgements if j > 1]) < 2):
+            return 1
+        if len([j for j in judgements if j < 1]) == 1:
+            return -1
+        if len([j for j in judgements if j < 1]) > 1:
+            return -2
         
     def sync_ekr(self):
         value_type_worst = ValueType.objects.get(name='EKR-ONGUNSTIG')
@@ -42,7 +80,7 @@ class Command(BaseCommand):
             area_class=Area.AREA_CLASS_KRW_WATERLICHAAM,
         ):
 
-            values = {}
+            values = []
             for parameter_type in parameter_types:
                 timeseries = TimeSeriesCache.objects.filter(
                     parametercache=parameter_type.parameter,
@@ -60,11 +98,14 @@ class Command(BaseCommand):
                     value=value,
                     value_type=parameter_type.value_type,
                 )
-                values.update({parameter_type.value_type: value})
+                values.append({
+                    'parameter_type': parameter_type,
+                    'value': value
+                })
             
             try:
-                value_worst = min([v for v in values.values()
-                                   if values is not None])
+                value_worst = min([v['value'] for v in values
+                                   if v['value'] is not None])
             except ValueError:
                 # All ekrs are None
                 value_worst = None
@@ -74,10 +115,11 @@ class Command(BaseCommand):
                 value=value_worst,
                 value_type=value_type_worst,
             )
-            value_score = self.calculate_value_score(values)
+            judgements = self._judgements(values, area)
+            overall_judgement = self._overall_judgement(judgements)
             self.update_area_value(
                 area=area,
-                value=value_score,
+                value=overall_judgement,
                 value_type=value_type_score,
             )
 
@@ -87,24 +129,3 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
        self.sync_ekr()
        self.sync_esf()
-       #for parameter_type in ValueType.objects.all():
-           
-               #from random import random
-               #area_value, created = AreaValue.objects.get_or_create(
-                   #value_type=value_type,
-                   #area=area
-               #)
-               #area_value.value = random()
-               #area_value.save()
-        # for fewsnormsource in fewsnormsources
-        
-        # if location present with ident = area ident
-            # for parameter in ekrpars
-                # if parameter in cache
-                    # get latest before deadline
-                    # save area value
-            # calculate accumulation
-                # save accumulation
-            # 
-           
-

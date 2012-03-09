@@ -5,7 +5,7 @@ Changelog of lizard-layers
 0.1.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add real calculation of judgements.
 
 
 0.1.7 (2012-03-08)

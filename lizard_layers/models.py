@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.gis.db import models
 from lizard_area.models import Area
 from lizard_fewsnorm.models import ParameterCache
+from lizard_measure.models import MeasuringRod
 
 class ValueType(models.Model):
     """
@@ -74,6 +75,12 @@ class ParameterType(models.Model):
         null=True,
         blank=True,
         verbose_name=_('Parameter'),
+    )
+    measuring_rod = models.ForeignKey(
+        MeasuringRod,
+        null=True,
+        blank=True,
+        verbose_name=_('MeasuringRod'),
     )
 
     class Meta:
