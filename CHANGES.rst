@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.1.9 (unreleased)
+0.1.9 (2012-03-16)
 ------------------
 
 - Add view SecureLayerView.
