@@ -8,6 +8,7 @@ from django.conf.urls.defaults import patterns
 from django.contrib import admin
 
 from lizard_layers.views import GeoserverLayer
+from lizard_layers.views import SecureGeoserverView
 
 
 admin.autodiscover()
@@ -19,6 +20,10 @@ urlpatterns = patterns(
       GeoserverLayer.as_view(),
       {},
       'lizard_layers.geoserver_layer'),
+    url(r'^secure/wms/$',
+      SecureGeoserverView.as_view(),
+      {},
+      'lizard_layers.secure_geoserver_view'),
     )
 
 

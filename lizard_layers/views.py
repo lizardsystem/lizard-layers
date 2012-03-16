@@ -7,6 +7,10 @@ from django.conf import settings
 from urllib2 import urlopen
 from urllib import urlencode
 
+from lizard_workspace.models import WmsServer
+import requests
+
+
 
 class GeoserverLayer(View):
     """
@@ -58,14 +62,6 @@ class GeoserverLayer(View):
         # Others only see objects without a data_set
         return 'data_set_id is null'
 
-    def _query_dict_to_dict(self, query_dict):
-        """
-        Return a normal dict.
-
-        
-        """
-
-
     def _geoserver_url(self, request):
         """
         Return geoserver url, extending existing cql filters with
@@ -100,11 +96,6 @@ class GeoserverLayer(View):
         if cql_filters:
             GET.update(dict(cql_filter=cql_filters))
 
-
-        print
-        print GET.urlencode()
-        print
-
         return settings.GEOSERVER_URL + '?' + GET.urlencode()
 
     def _url_to_response(self, url):
@@ -127,3 +118,81 @@ class GeoserverLayer(View):
         """
         url = self._geoserver_url(request)
         return self._url_to_response(url)
+
+
+
+class SecureGeoserverView(View):
+    """
+    Relay request to secure geoserver and return its response
+    """
+    # Get passwords
+    # Relate to dataset via the sync tasks
+    # Get datasets
+    # See what user would be required for this layer by inspecting request, arrgh.
+    
+    def _is_allowed_to(self, dataset, request):
+        """
+        Return if request is allowed to see objects of dataset.
+        
+        Assumes lizard_security.
+        """
+        # Super users are always allowed
+        if request.user is not None and request.user.is_superuser:
+            return True
+        # Normal users are checked for allowed_data_set_ids
+        if dataset.pk in request.allowed_data_set_ids:
+            return True 
+        return False
+
+    def _get_auth(self, request):
+        """
+        Return authentication for workspace prefix in request, if allowed.
+
+        Assumptions:
+        - A ws_prefix is unique among wmsservers
+        - One synctask per server
+
+        If the dataset for this sync_task corresponds to the lizard_security dataset
+        found on the request, auth will be returned. Superusers always
+        get the right auth.
+        """
+        layers_keys = [k for k in request.GET if k.lower() == 'layers']
+        if not layers_keys:
+            # Other request, for example for capabilities
+            return None
+        ws_prefix = request.GET.get(layers_keys[0]).split(':')[0]
+
+        try:
+            wms_server = WmsServer.objects.get(ws_prefix=ws_prefix)
+        except WmsServer.DoesNotExist:
+            # No or unknown prefix
+            return None
+
+        dataset = wms_server.synctask_set.get()
+
+        if self._is_allowed_to(dataset, request):
+            return (wms_server.username, wms_server.password)
+        return None
+
+    def _url_to_response(self, url, auth=None):
+        """
+        Return django response object retrieved from remote url.
+        """
+        r = requests.get(url, auth=auth)
+        content = r.content
+        content_type = r.headers['content-type']
+
+        response = HttpResponse(
+            content,
+            content_type=content_type,
+        )
+        return response
+
+    def get(self, request, *args, **kwargs):
+        """
+        Relay request to secure geoserver and return its response
+        """
+        url = settings.SECURE_GEOSERVER_URL + '?' + request.GET.urlencode()
+        auth = self._get_auth(request)
+
+        return self._url_to_response(url, auth=auth)
