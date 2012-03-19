@@ -5,7 +5,7 @@ Changelog of lizard-layers
 0.1.10 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix bug where sync_task was used instead of dataset
 
 
 0.1.9 (2012-03-16)

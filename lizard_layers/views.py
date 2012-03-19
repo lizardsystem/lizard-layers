@@ -168,8 +168,7 @@ class SecureGeoserverView(View):
             # No or unknown prefix
             return None
 
-        dataset = wms_server.synctask_set.get()
-
+        dataset = wms_server.synctask_set.get().data_set
         if self._is_allowed_to(dataset, request):
             return (wms_server.username, wms_server.password)
         return None
