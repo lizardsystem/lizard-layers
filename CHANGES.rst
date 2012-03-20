@@ -2,8 +2,8 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.1.11 (unreleased)
--------------------
+0.2 (2012-03-20)
+----------------
 
 - Add model for internal / external server mappings, including migration.
 - Move geoserver external urls from settings to fixture.
