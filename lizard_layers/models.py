@@ -9,6 +9,49 @@ from lizard_area.models import Area
 from lizard_fewsnorm.models import ParameterCache
 from lizard_measure.models import MeasuringRod
 
+class ServerMapping(models.Model):
+    """
+    Mapping between between external (geo)server and internal path.
+    """
+    name = models.CharField(
+        max_length=64,
+        blank=True,
+        null=True,
+        help_text=''
+    )
+    description = models.CharField(
+        max_length=512,
+        blank=True,
+        null=True,
+        help_text=''
+    ) 
+    description = models.CharField(
+        max_length=512,
+        blank=True,
+        null=True,
+        help_text=''
+    )
+    external_server = models.CharField(
+        max_length=512,
+        blank=True,
+        null=True,
+        help_text='Path to external geoserver not to be exposed to users'
+    )
+    relative_path = models.CharField(
+        max_length=512,
+        blank=True,
+        null=True,
+        help_text='Local path to be used by clients'
+    )
+
+    class Meta:
+        verbose_name = _('Server mapping')
+        verbose_name_plural = _('Server mappings')
+
+    def __unicode__(self):
+        return self.name
+
+
 class ValueType(models.Model):
     """
     Value type.

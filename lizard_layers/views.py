@@ -3,14 +3,14 @@
 # Create your views here.
 from django.views.generic import View
 from django.http import HttpResponse
-from django.conf import settings
+from django.core.urlresolvers import reverse
 from urllib2 import urlopen
 from urllib import urlencode
 
 from lizard_workspace.models import WmsServer
+from lizard_layers.models import ServerMapping
+
 import requests
-
-
 
 class GeoserverLayer(View):
     """
@@ -62,7 +62,7 @@ class GeoserverLayer(View):
         # Others only see objects without a data_set
         return 'data_set_id is null'
 
-    def _geoserver_url(self, request):
+    def _geoserver_url(self, request, external_server):
         """
         Return geoserver url, extending existing cql filters with
         with security related cql parameters based on request user.
@@ -96,7 +96,7 @@ class GeoserverLayer(View):
         if cql_filters:
             GET.update(dict(cql_filter=cql_filters))
 
-        return settings.GEOSERVER_URL + '?' + GET.urlencode()
+        return external_server + '?' + GET.urlencode()
 
     def _url_to_response(self, url):
         """
@@ -116,7 +116,10 @@ class GeoserverLayer(View):
         """
         Return layer from geoserver applying security filter.
         """
-        url = self._geoserver_url(request)
+        external_server = ServerMapping.objects.get(
+            relative_path=reverse('lizard_layers.geoserver_view')
+        ).external_server
+        url = self._geoserver_url(request, external_server=external_server)
         return self._url_to_response(url)
 
 
@@ -191,7 +194,11 @@ class SecureGeoserverView(View):
         """
         Relay request to secure geoserver and return its response
         """
-        url = settings.SECURE_GEOSERVER_URL + '?' + request.GET.urlencode()
+
+        external_server = ServerMapping.objects.get(
+            relative_path=reverse('lizard_layers.secure_geoserver_view')
+        ).external_server
+        url = external_server + '?' + request.GET.urlencode()
         auth = self._get_auth(request)
 
         return self._url_to_response(url, auth=auth)

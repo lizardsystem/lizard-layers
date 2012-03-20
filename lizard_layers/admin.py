@@ -1,8 +1,11 @@
 from django.contrib import admin
 
-from lizard_layers.models import ValueType
-from lizard_layers.models import AreaValue
-from lizard_layers.models import ParameterType
+from lizard_layers.models import (
+    ValueType,
+    AreaValue,
+    ParameterType,
+    ServerMapping,
+)
 
 
 class ValueTypeAdmin(admin.ModelAdmin):
@@ -29,7 +32,7 @@ class ParameterTypeAdmin(admin.ModelAdmin):
         'parameter',
     ]
 
-
 admin.site.register(ParameterType, ParameterTypeAdmin)
 admin.site.register(ValueType, ValueTypeAdmin)
 admin.site.register(AreaValue, AreaValueAdmin)
+admin.site.register(ServerMapping)

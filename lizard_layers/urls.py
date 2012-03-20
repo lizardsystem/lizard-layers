@@ -19,7 +19,7 @@ urlpatterns = patterns(
     url(r'^wms/$',
       GeoserverLayer.as_view(),
       {},
-      'lizard_layers.geoserver_layer'),
+      'lizard_layers.geoserver_view'),
     url(r'^secure/wms/$',
       SecureGeoserverView.as_view(),
       {},
