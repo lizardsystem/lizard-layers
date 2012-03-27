@@ -5,7 +5,7 @@ Changelog of lizard-layers
 0.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added api and templates dir.
 
 
 0.3 (2012-03-27)

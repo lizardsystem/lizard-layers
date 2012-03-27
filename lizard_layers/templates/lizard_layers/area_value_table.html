@@ -1,0 +1,11 @@
+<table>
+  <tbody>
+    {% for row in view.values %}
+    <tr>
+      {% for field in row %}
+      <td>{{ field }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
