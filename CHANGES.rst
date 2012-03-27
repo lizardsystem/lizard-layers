@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.3 (unreleased)
+0.3 (2012-03-27)
 ----------------
 
 - Added view and api for AreaValue as a table.
