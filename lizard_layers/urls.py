@@ -9,6 +9,10 @@ from django.contrib import admin
 
 from lizard_layers.views import GeoserverLayer
 from lizard_layers.views import SecureGeoserverView
+from lizard_layers.views import AreaValueView
+
+
+API_URL_NAME = 'lizard_layers_api_root'
 
 
 admin.autodiscover()
@@ -24,6 +28,12 @@ urlpatterns = patterns(
       SecureGeoserverView.as_view(),
       {},
       'lizard_layers.secure_geoserver_view'),
+    url(r'^value/$',
+      AreaValueView.as_view(),
+      {},
+      'lizard_layers.area_value_view'),
+    (r'^api/',
+     include('lizard_layers.api.urls')),
     )
 
 

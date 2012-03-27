@@ -9,6 +9,8 @@ from urllib import urlencode
 
 from lizard_workspace.models import WmsServer
 from lizard_layers.models import ServerMapping
+from lizard_layers.models import AreaValue
+from lizard_map.views import AppView
 
 import requests
 
@@ -123,7 +125,6 @@ class GeoserverLayer(View):
         return self._url_to_response(url)
 
 
-
 class SecureGeoserverView(View):
     """
     Relay request to secure geoserver and return its response
@@ -132,11 +133,11 @@ class SecureGeoserverView(View):
     # Relate to dataset via the sync tasks
     # Get datasets
     # See what user would be required for this layer by inspecting request, arrgh.
-    
+
     def _is_allowed_to(self, dataset, request):
         """
         Return if request is allowed to see objects of dataset.
-        
+
         Assumes lizard_security.
         """
         # Super users are always allowed
@@ -144,7 +145,7 @@ class SecureGeoserverView(View):
             return True
         # Normal users are checked for allowed_data_set_ids
         if dataset.pk in request.allowed_data_set_ids:
-            return True 
+            return True
         return False
 
     def _get_auth(self, request):
@@ -202,3 +203,10 @@ class SecureGeoserverView(View):
         auth = self._get_auth(request)
 
         return self._url_to_response(url, auth=auth)
+
+
+class AreaValueView(AppView):
+    template_name = 'lizard_layers/area_value_table.html'
+
+    def values(self):
+        return AreaValue.as_table()

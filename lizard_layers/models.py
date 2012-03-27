@@ -24,7 +24,7 @@ class ServerMapping(models.Model):
         blank=True,
         null=True,
         help_text=''
-    ) 
+    )
     description = models.CharField(
         max_length=512,
         blank=True,
@@ -88,7 +88,7 @@ class AreaValue(models.Model):
         blank=True,
         verbose_name=_('Value type'),
     )
-    
+
     value = models.FloatField(
         null=True,
         blank=True,
@@ -101,6 +101,37 @@ class AreaValue(models.Model):
 
     def __unicode__(self):
         return '%s - %s' % (self.area, self.value)
+
+    @classmethod
+    def as_table(cls):
+        """
+        How contents as table (list of lists).
+
+        Initial version of function.
+        """
+        areas = Area.objects.exclude(name=None).filter(
+            area_class=Area.AREA_CLASS_KRW_WATERLICHAAM)
+        area_values = dict([
+                ((area_value.area.ident, area_value.value_type.name), area_value)
+                for area_value in cls.objects.filter(area__in=areas)])
+        value_types = ValueType.objects.all()
+
+        result = []
+        # First row is the header
+        result.append(
+            ['Locatie', ] +
+            [value_type.name for value_type in value_types])
+        for area in areas:
+            # Each row starts with an area name plus all values
+            row = [area.name]
+            for value_type in value_types:
+                area_value = area_values.get((area.ident, value_type.name), None)
+                if area_value is not None and area_value.value is not None:
+                    row.append(area_value.value)
+                else:
+                    row.append('-')
+            result.append(row)
+        return result
 
 
 class ParameterType(models.Model):
