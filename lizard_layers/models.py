@@ -94,6 +94,16 @@ class AreaValue(models.Model):
         blank=True,
         verbose_name=_('Value'),
     )
+    flag = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name=_('Flag'),
+    )
+    comment = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name=_('Comment'),
+    )
 
     class Meta:
         verbose_name = _('Area value')
