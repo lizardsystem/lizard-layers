@@ -5,7 +5,7 @@ Changelog of lizard-layers
 0.5 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added fields flag and comment to AreaValue admin.
 
 
 0.4 (2012-03-28)

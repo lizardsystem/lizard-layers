@@ -20,6 +20,8 @@ class AreaValueAdmin(admin.ModelAdmin):
     list_display = [
         'area',
         'value',
+        'flag',
+        'comment',
         'value_type',
     ]
 
