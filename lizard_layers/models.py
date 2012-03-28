@@ -99,7 +99,8 @@ class AreaValue(models.Model):
         blank=True,
         verbose_name=_('Flag'),
     )
-    comment = models.TextField(
+    comment = models.CharField(
+        max_length=64,
         null=True,
         blank=True,
         verbose_name=_('Comment'),

@@ -5,6 +5,9 @@ Changelog of lizard-layers
 0.5 (unreleased)
 ----------------
 
+- Changed AreaValue.comment field from TextField to CharField with
+  migration.
+
 - Added fields flag and comment to AreaValue admin.
 
 
