@@ -2,8 +2,8 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.3.2 (unreleased)
-------------------
+0.4 (2012-03-28)
+----------------
 
 - Added flag and comment to AreaValue and migrations.
 
