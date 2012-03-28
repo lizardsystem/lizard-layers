@@ -16,6 +16,7 @@ install_requires = [
     'lizard-ui',
     'lizard-area',
     'lizard-workspace',
+    'lizard-fewsnorm >= 0.12',
     'django-nose',
     'pkginfo',
     'requests',
