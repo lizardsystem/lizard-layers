@@ -2,8 +2,8 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.5 (unreleased)
-----------------
+0.4.1 (2012-03-28)
+------------------
 
 - Changed AreaValue.comment field from TextField to CharField with
   migration.
