@@ -7,6 +7,8 @@ Changelog of lizard-layers
 
 - Added flag and comment to AreaValue and migrations.
 
+- Updated sync_layers to update flag and comment as well.
+
 
 0.3.1 (2012-03-27)
 ------------------
