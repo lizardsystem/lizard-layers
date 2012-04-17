@@ -3,6 +3,7 @@
 
 from optparse import make_option
 
+from django.db import transaction
 from django.core.management.base import BaseCommand
 from lizard_fewsnorm.models import FewsNormSource
 
@@ -31,6 +32,7 @@ class Command(BaseCommand):
         area_value.flag = flag
         area_value.comment = comment
         area_value.save()
+        logger.debug('Area value: %s %s' % (area_value, value_type))
         return created
 
     def _judgements(self, values, area):
@@ -47,7 +49,7 @@ class Command(BaseCommand):
                 )
                 judgements.append(
                     score.judgement(
-                        value['value'],
+                        value['comment'],
                         score.target_2015,
                     )
                 )
@@ -81,7 +83,7 @@ class Command(BaseCommand):
         for area in Area.objects.filter(
             area_class=Area.AREA_CLASS_KRW_WATERLICHAAM,
         ):
-
+            logger.debug('Updating area %s...' % area)
             values = []
             for parameter_type in parameter_types:
                 timeseries = TimeSeriesCache.objects.filter(
@@ -94,7 +96,7 @@ class Command(BaseCommand):
                 if timeseries:
                     timeserie = timeseries[0]
                     try:
-                        event = timeserie.get_latest_event(with_comments=True)
+                        event = timeserie.get_latest_event()
                         value = event.value
                         flag = event.flag
                         comment = event.comment
@@ -111,7 +113,9 @@ class Command(BaseCommand):
                 )
                 values.append({
                     'parameter_type': parameter_type,
-                    'value': value
+                    'value': value,
+                    'flag': flag,
+                    'comment': comment
                 })
 
             try:
@@ -124,6 +128,7 @@ class Command(BaseCommand):
             self.update_area_value(
                 area=area,
                 value=value_worst,
+                comment=None,
                 value_type=value_type_worst,
             )
             judgements = self._judgements(values, area)
@@ -131,12 +136,14 @@ class Command(BaseCommand):
             self.update_area_value(
                 area=area,
                 value=overall_judgement,
+                comment=None,
                 value_type=value_type_score,
             )
 
     def sync_esf(self):
         pass
 
+    @transaction.commit_on_success
     def handle(self, *args, **options):
        self.sync_ekr()
        self.sync_esf()

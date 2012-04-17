@@ -5,7 +5,8 @@ Changelog of lizard-layers
 0.4.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Updated experimental sync_layers judgement, based on comments. See
+  also lizard-measure 1.40.
 
 
 0.4.1 (2012-03-28)
