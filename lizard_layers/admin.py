@@ -30,7 +30,7 @@ class ParameterTypeAdmin(admin.ModelAdmin):
     list_display_links = ['value_type']
     list_display = [
         'value_type',
-        'measuring_rod',
+        'measuring_rod_code',
         'parameter',
     ]
 

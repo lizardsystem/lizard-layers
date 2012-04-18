@@ -1,18 +1,21 @@
 #!/usr/bin/python
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 
+# This sync function has dependencies on lizard_measure. So include
+# lizard_measure in your INSTALLED_APPS.
+
 from optparse import make_option
 
 from django.db import transaction
 from django.core.management.base import BaseCommand
-from lizard_fewsnorm.models import FewsNormSource
+#from lizard_fewsnorm.models import FewsNormSource
 
 from lizard_area.models import Area
 from lizard_layers.models import AreaValue
 from lizard_layers.models import ValueType
 from lizard_layers.models import ParameterType
 from lizard_fewsnorm.models import TimeSeriesCache
-from lizard_measure.models import MeasuringRod
+#from lizard_measure.models import MeasuringRod
 from lizard_measure.models import Score
 
 import logging
@@ -44,7 +47,7 @@ class Command(BaseCommand):
             # TODO Performance improvement possible here.
             try:
                 score = Score.objects.get(
-                    measuring_rod=value['parameter_type'].measuring_rod,
+                    measuring_rod__code=value['parameter_type'].measuring_rod_code,
                     area=area,
                 )
                 judgements.append(

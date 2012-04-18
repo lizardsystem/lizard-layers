@@ -5,6 +5,10 @@ Changelog of lizard-layers
 0.4.2 (unreleased)
 ------------------
 
+- Removed dependencies from lizard-measure: changed ForeignKey
+  MeasuringRod to CharField MeasuringRod Code. There are now only
+  dependencies in the sync_layers function.
+
 - Updated experimental sync_layers judgement, based on comments. See
   also lizard-measure 1.40.
 
