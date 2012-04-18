@@ -12,6 +12,8 @@ Changelog of lizard-layers
 - Updated experimental sync_layers judgement, based on comments. See
   also lizard-measure 1.40.
 
+- Added AreaValue.timestamp.
+
 
 0.4.1 (2012-03-28)
 ------------------

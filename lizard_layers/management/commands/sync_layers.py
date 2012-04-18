@@ -26,7 +26,8 @@ class Command(BaseCommand):
     """
     Synchronizes ESF and EKR in datasources into cache table.
     """
-    def update_area_value(self, area, value, value_type, flag=None, comment=None):
+    def update_area_value(self, area, value, value_type,
+                          flag=None, comment=None, timestamp=None):
         area_value, created = AreaValue.objects.get_or_create(
             area=area,
             value_type=value_type,
@@ -34,8 +35,9 @@ class Command(BaseCommand):
         area_value.value = value
         area_value.flag = flag
         area_value.comment = comment
+        area_value.timestamp = timestamp
         area_value.save()
-        logger.debug('Area value: %s %s' % (area_value, value_type))
+        logger.debug('Updated area value: %s %s' % (area_value, value_type))
         return created
 
     def _judgements(self, values, area):
@@ -96,6 +98,7 @@ class Command(BaseCommand):
                 value = None
                 flag = None
                 comment = None
+                timestamp = None
                 if timeseries:
                     timeserie = timeseries[0]
                     try:
@@ -103,6 +106,7 @@ class Command(BaseCommand):
                         value = event.value
                         flag = event.flag
                         comment = event.comment
+                        timestamp = event.timestamp
                     except IndexError:
                         # No events at all
                         pass
@@ -112,13 +116,15 @@ class Command(BaseCommand):
                     value=value,
                     flag=flag,
                     comment=comment,
+                    timestamp=timestamp,
                     value_type=parameter_type.value_type,
                 )
                 values.append({
                     'parameter_type': parameter_type,
                     'value': value,
                     'flag': flag,
-                    'comment': comment
+                    'comment': comment,
+                    'timestamp': timestamp,
                 })
 
             try:

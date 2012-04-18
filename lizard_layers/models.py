@@ -81,14 +81,12 @@ class AreaValue(models.Model):
         blank=True,
         verbose_name=_('Area'),
     )
-
     value_type = models.ForeignKey(
         ValueType,
         null=True,
         blank=True,
         verbose_name=_('Value type'),
     )
-
     value = models.FloatField(
         null=True,
         blank=True,
@@ -104,6 +102,11 @@ class AreaValue(models.Model):
         null=True,
         blank=True,
         verbose_name=_('Comment'),
+    )
+    timestamp = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('Timestamp'),
     )
 
     class Meta:
