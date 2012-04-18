@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.4.2 (unreleased)
+0.4.2 (2012-04-18)
 ------------------
 
 - Removed dependencies from lizard-measure: changed ForeignKey
