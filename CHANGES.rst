@@ -5,7 +5,7 @@ Changelog of lizard-layers
 0.4.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add class and therefore styling to area value score table.
 
 
 0.4.2 (2012-04-18)
