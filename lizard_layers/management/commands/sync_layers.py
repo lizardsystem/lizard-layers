@@ -4,8 +4,6 @@
 # This sync function has dependencies on lizard_measure. So include
 # lizard_measure in your INSTALLED_APPS.
 
-from optparse import make_option
-
 from django.db import transaction
 from django.core.management.base import BaseCommand
 #from lizard_fewsnorm.models import FewsNormSource
@@ -15,7 +13,6 @@ from lizard_layers.models import AreaValue
 from lizard_layers.models import ValueType
 from lizard_layers.models import ParameterType
 from lizard_fewsnorm.models import TimeSeriesCache
-#from lizard_measure.models import MeasuringRod
 from lizard_measure.models import Score
 
 import logging
@@ -48,16 +45,18 @@ class Command(BaseCommand):
         for value in values:
             # TODO Performance improvement possible here.
             try:
+                measuring_rod_code = value[
+                    'parameter_type'].measuring_rod_code
                 score = Score.objects.get(
-                    measuring_rod__code=value['parameter_type'].measuring_rod_code,
+                    measuring_rod__code=measuring_rod_code,
                     area=area,
-                )
+                    )
                 judgements.append(
                     score.judgement(
                         value['comment'],
                         score.target_2015,
+                        )
                     )
-                )
             except Score.DoesNotExist:
                 judgements.append(None)
         return judgements
@@ -154,5 +153,5 @@ class Command(BaseCommand):
 
     @transaction.commit_on_success
     def handle(self, *args, **options):
-       self.sync_ekr()
-       self.sync_esf()
+        self.sync_ekr()
+        self.sync_esf()
