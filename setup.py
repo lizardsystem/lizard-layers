@@ -15,6 +15,7 @@ install_requires = [
     'django-extensions',
     'lizard-ui',
     'lizard-area',
+    'lizard-task',
     'lizard-workspace',
     'lizard-fewsnorm >= 0.12',
     'django-nose',

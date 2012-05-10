@@ -5,7 +5,9 @@ Changelog of lizard-layers
 0.4.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added celery tasks sync_layers.
+
+- Added dependency on lizard-task.
 
 
 0.4.3 (2012-04-24)
