@@ -76,8 +76,6 @@ def _overall_judgement(judgements):
 def sync_ekr(username=None, taskname=None, dataset=None):
     # Set up logging
     handler = get_handler(username=username, taskname=taskname)
-    #logger = logging.getLogger(__name__)
-    #logger = logging.getLogger(taskname or __name__)
     logger.addHandler(handler)
     logger.setLevel(20)
 
@@ -97,7 +95,7 @@ def sync_ekr(username=None, taskname=None, dataset=None):
         logger.info('Data set: %s' % dataset)
     logger.info('Updating %d areas...' % areas.count())
     for area in areas:
-        logger.debug('Updating area %s...' % area)
+        logger.info('Updating area %s...' % area)
         values = []
         for parameter_type in parameter_types:
             timeseries = TimeSeriesCache.objects.filter(
@@ -157,9 +155,13 @@ def sync_ekr(username=None, taskname=None, dataset=None):
             comment=None,
             value_type=value_type_score,
         )
+        logger.info('worst: %s, overall: %s' % (value_worst, overall_judgement))
 
     logger.info('Finished')
+
+    # Remove logging handler
     logger.removeHandler(handler)
+
     return 'OK'
 
 
@@ -175,5 +177,7 @@ def sync_esf(username=None, taskname=None):
     logger.info('sync_esf')
     logger.info('TODO')
 
+    # Remove logging handler
     logger.removeHandler(handler)
+
     return 'TODO'
