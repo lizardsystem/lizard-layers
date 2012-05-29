@@ -7,6 +7,10 @@ Changelog of lizard-layers
 
 - Added logging in celery task.
 
+- Added list_filter in admin AreaValue.
+
+- Updated sync_ekr for EKR-ONGUNSTIG.
+
 
 0.5 (2012-05-10)
 ----------------

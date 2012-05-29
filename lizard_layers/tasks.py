@@ -57,18 +57,35 @@ def _judgements(values, area):
 def _overall_judgement(judgements):
     """
     Return overall judgement.
+
+    See also GS060
     """
     if None in judgements:
+        # 'doelbereik onbekend' (wordt niet getoond): van minimaal 1
+        # EKR-indicator ontbreekt de score en/of de doelstelling voor
+        # 2015
         return None
     if (min(judgements) == 1 and
         len([j for j in judgements if j > 1]) >= 2):
+        # 'doel ruimschoots bereikt' (bijv: VV): de scores van alle 4
+        # EKR-indicatoren voldoen aan de doelstelling van 2015 en
+        # minimaal 2 EKR-indicatoren hebben al een hogere score
         return 2
     if (min(judgements) == 1 and
         len([j for j in judgements if j > 1]) < 2):
+        # 'doel bereikt' (bijv: V): de scores van alle 4
+        # EKR-indicatoren voldoen aan de doelstelling van 2015, maar
+        # er zijn geen 2 EKR-indicatoren die een hogere score hebben
         return 1
     if len([j for j in judgements if j < 1]) == 1:
+        # 'doel nog niet bereikt' (bijv: -): de score van 1
+        # EKR-indicator voldoen nog niet aan de doelstelling van 2015,
+        # de andere 3 al wel
         return -1
     if len([j for j in judgements if j < 1]) > 1:
+        # 'doel nog lang niet bereikt' (bijv: --): de score van
+        # minimaal 2 EKR-indicatoren voldoen nog niet aan de
+        # doelstelling van 2015
         return -2
 
 
@@ -95,7 +112,7 @@ def sync_ekr(username=None, taskname=None, dataset=None):
         logger.info('Data set: %s' % dataset)
     logger.info('Updating %d areas...' % areas.count())
     for area in areas:
-        logger.info('Updating area %s...' % area)
+        logger.debug('Updating area %s...' % area)
         values = []
         for parameter_type in parameter_types:
             timeseries = TimeSeriesCache.objects.filter(
@@ -135,18 +152,27 @@ def sync_ekr(username=None, taskname=None, dataset=None):
             })
 
         try:
-            value_worst = min([v['value'] for v in values
-                               if v['value'] is not None])
+            # value_worst = min([v['value'] for v in values
+            #                    if v['value'] is not None])
+            value_worst = min(values, key=lambda v: v['value'])
         except ValueError:
             # All ekrs are None
             value_worst = None
 
-        update_area_value(
-            area=area,
-            value=value_worst,
-            comment=None,
-            value_type=value_type_worst,
-        )
+        if value_worst is not None:
+            update_area_value(
+                area=area,
+                value=value_worst['value'],
+                comment=value_worst['comment'],
+                value_type=value_type_worst,
+                )
+        else:
+            update_area_value(
+                area=area,
+                value=None,
+                comment=None,
+                value_type=value_type_worst,
+                )
         judgements = _judgements(values, area)
         overall_judgement = _overall_judgement(judgements)
         update_area_value(
@@ -155,7 +181,7 @@ def sync_ekr(username=None, taskname=None, dataset=None):
             comment=None,
             value_type=value_type_score,
         )
-        logger.info('worst: %s, overall: %s' % (value_worst, overall_judgement))
+        logger.debug('worst: %s, overall: %s' % (str(value_worst), overall_judgement))
 
     logger.info('Finished')
 

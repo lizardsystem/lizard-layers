@@ -24,6 +24,7 @@ class AreaValueAdmin(admin.ModelAdmin):
         'comment',
         'value_type',
     ]
+    list_filter = ['value_type', ]
 
 
 class ParameterTypeAdmin(admin.ModelAdmin):
