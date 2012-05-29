@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.6 (unreleased)
+0.6 (2012-05-29)
 ----------------
 
 - Added logging in celery task.
