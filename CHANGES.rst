@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.8 (unreleased)
+0.8 (2012-05-30)
 ----------------
 
 - Updated EKR table with goals and colors, see GS060.
