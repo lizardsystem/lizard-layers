@@ -208,10 +208,10 @@ class SecureGeoserverView(View):
 class AreaValueView(AppView):
     template_name = 'lizard_layers/area_value_table.html'
     use_value_types = [
-        'EKR-VIS', 'EKR-VIS-GOAL-2015', 'EKR-VIS-GOAL-2027',
         'EKR-FYTOPL', 'EKR-FYTOPL-GOAL-2015', 'EKR-FYTOPL-GOAL-2027',
+        'EKR-OVWFLORA', 'EKR-OVWFLORA-GOAL-2015', 'EKR-OVWFLORA-GOAL-2027',
         'EKR-MAFAUNA', 'EKR-MAFAUNA-GOAL-2015', 'EKR-MAFAUNA-GOAL-2027',
-        'EKR-OVWFLORA', 'EKR-OVWFLORA-GOAL-2015', 'EKR-OVWFLORA-GOAL-2027', ]
+        'EKR-VIS', 'EKR-VIS-GOAL-2015', 'EKR-VIS-GOAL-2027']
 
     def table_header(self):
         return AreaValue.table_header(

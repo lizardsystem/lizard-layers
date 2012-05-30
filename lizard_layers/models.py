@@ -118,17 +118,24 @@ class AreaValue(models.Model):
 
     @classmethod
     def _table_value_types(cls, use_value_types=None):
+        # make a dict of value_types, by name
         if use_value_types:
-            value_types = ValueType.objects.filter(name__in=use_value_types)
+            value_types = dict(
+                [(vt.name, vt) for vt in
+                 ValueType.objects.filter(name__in=use_value_types)])
         else:
-            value_types = ValueType.objects.all()
+            value_types = dict(
+                [(vt.name, vt) for vt in ValueType.objects.all()])
         return value_types
 
     @classmethod
     def table_header(cls, use_value_types=None):
         """Get table header, for use with as_table"""
-        value_types = cls._table_value_types(use_value_types=use_value_types)
-        result = ['Locatie', ] + [value_type.name for value_type in value_types]
+        result = ['Locatie', ]
+        if use_value_types:
+            result.extend(use_value_types)
+        else:
+            result.extend(cls._table_value_types().keys())
         return result
 
     @classmethod
@@ -145,6 +152,9 @@ class AreaValue(models.Model):
         Initial version of function.
         """
         value_types = cls._table_value_types(use_value_types=use_value_types)
+        # use_value_types makes the order of the items
+        if not use_value_types:
+            use_value_types = value_types.keys()
 
         areas = Area.objects.exclude(name=None).filter(
             area_class=Area.AREA_CLASS_KRW_WATERLICHAAM)
@@ -160,9 +170,9 @@ class AreaValue(models.Model):
         for area in areas:
             # Each row starts with an area name plus all values
             row = [area.name]
-            for value_type in value_types:
-                area_value = area_values.get((area.ident, value_type.name), None)
-                if area_value is not None and area_value.value is not None:
+            for value_type_name in use_value_types:
+                area_value = area_values.get((area.ident, value_type_name), None)
+                if area_value is not None:
                     row.append(area_value)
                 else:
                     row.append('-')

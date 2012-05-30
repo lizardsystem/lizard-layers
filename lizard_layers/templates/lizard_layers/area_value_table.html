@@ -1,14 +1,46 @@
 <table class="lizard">
   <tbody>
+    {% comment %}
     <tr>
+      we use a custom header instead
     {% for field in view.table_header %}
-      <td>{{ field }}</td>
+      <td width="50px">{{ field }}</td>
     {% endfor %}
     </tr>
+    {% endcomment %}
+
+    <tr>
+      <th>Locatie</th>
+      <th colspan="3">Fytoplankton</th>
+      <th colspan="3">Overige waterflora</th>
+      <th colspan="3">Macrofauna</th>
+      <th colspan="3">Vis</th>
+    </tr>
+    <tr>
+      <td></td>
+      <td>nu</td>
+      <td>'15</td>
+      <td>'27</td>
+      <td>nu</td>
+      <td>'15</td>
+      <td>'27</td>
+      <td>nu</td>
+      <td>'15</td>
+      <td>'27</td>
+      <td>nu</td>
+      <td>'15</td>
+      <td>'27</td>
+    </tr>
+
     {% for row in view.values %}
     <tr>
       {% for field in row %}
+      {% ifequal forloop.counter0 0 %}
       <td>{{ field }}</td>
+      {% else %}
+      <td bgcolor="{% ifequal field.comment 'slecht' %}#ff0000{% endifequal %}{% ifequal field.comment 'ontoereikend' %}#ff8000{% endifequal %}{% ifequal field.comment 'matig' %}#ffff00{% endifequal %}{% ifequal field.comment 'goed' %}#00ff00{% endifequal %}{% ifequal field.comment 'zeer goed' %}#0000ff{% endifequal %}" color="#d0d0d0">
+      {% firstof field.value '' %}</td>
+      {% endifequal %}
       {% endfor %}
     </tr>
     {% endfor %}
