@@ -114,34 +114,56 @@ class AreaValue(models.Model):
         verbose_name_plural = _('Area values')
 
     def __unicode__(self):
-        return '%s - %s' % (self.area, self.value)
+        return '%s - %s/%s' % (self.area, self.value, self.comment)
 
     @classmethod
-    def as_table(cls):
+    def _table_value_types(cls, use_value_types=None):
+        if use_value_types:
+            value_types = ValueType.objects.filter(name__in=use_value_types)
+        else:
+            value_types = ValueType.objects.all()
+        return value_types
+
+    @classmethod
+    def table_header(cls, use_value_types=None):
+        """Get table header, for use with as_table"""
+        value_types = cls._table_value_types(use_value_types=use_value_types)
+        result = ['Locatie', ] + [value_type.name for value_type in value_types]
+        return result
+
+    @classmethod
+    def as_table(cls, use_value_types=None, add_header=False):
         """
         How contents as table (list of lists).
 
+        It shows krw waterlichamen per row and valuetypes as columns.
+
+        options:
+        use_value_types: only display these value types
+        as_ekr: display custom
+
         Initial version of function.
         """
+        value_types = cls._table_value_types(use_value_types=use_value_types)
+
         areas = Area.objects.exclude(name=None).filter(
             area_class=Area.AREA_CLASS_KRW_WATERLICHAAM)
         area_values = dict([
                 ((area_value.area.ident, area_value.value_type.name), area_value)
                 for area_value in cls.objects.filter(area__in=areas)])
-        value_types = ValueType.objects.all()
 
         result = []
-        # First row is the header
-        result.append(
-            ['Locatie', ] +
-            [value_type.name for value_type in value_types])
+        if add_header:
+            # First row is the header
+            result.append(cls.table_header(use_value_types=use_value_types))
+
         for area in areas:
             # Each row starts with an area name plus all values
             row = [area.name]
             for value_type in value_types:
                 area_value = area_values.get((area.ident, value_type.name), None)
                 if area_value is not None and area_value.value is not None:
-                    row.append(area_value.value)
+                    row.append(area_value)
                 else:
                     row.append('-')
             result.append(row)

@@ -1,5 +1,6 @@
 # Celery tasks
 import logging
+import itertools
 from celery.task import task
 
 from lizard_area.models import Area
@@ -9,6 +10,7 @@ from lizard_layers.models import ParameterType
 from lizard_fewsnorm.models import TimeSeriesCache
 from lizard_measure.models import Score
 from lizard_task.handler import get_handler
+from lizard_task.task import task_logging
 
 
 logger = logging.getLogger(__name__)
@@ -90,11 +92,11 @@ def _overall_judgement(judgements):
 
 
 @task
-def sync_ekr(username=None, taskname=None, dataset=None):
+def sync_ekr(username=None, taskname=None, dataset=None, loglevel=20):
     # Set up logging
     handler = get_handler(username=username, taskname=taskname)
     logger.addHandler(handler)
-    logger.setLevel(20)
+    logger.setLevel(loglevel)
 
     logger.info('sync_ekr')
 
@@ -181,7 +183,8 @@ def sync_ekr(username=None, taskname=None, dataset=None):
             comment=None,
             value_type=value_type_score,
         )
-        logger.debug('worst: %s, overall: %s' % (str(value_worst), overall_judgement))
+        logger.debug('worst: %s, overall: %s' % (
+                str(value_worst), overall_judgement))
 
     logger.info('Finished')
 
@@ -189,6 +192,91 @@ def sync_ekr(username=None, taskname=None, dataset=None):
     logger.removeHandler(handler)
 
     return 'OK'
+
+
+@task
+@task_logging
+def sync_ekr_goals(username=None, taskname=None, loglevel=20):
+    """
+    Make AreaValues for value types EKR-VIS-GOAL-2015,
+    EKR-VIS-GOAL-2027, etc.
+
+    Run this once in a while.
+    """
+
+    def update_value_types(measuring_rod_code):
+        value_type_name = 'EKR-%s' % measuring_rod_code
+        value_type, created = ValueType.objects.get_or_create(
+            name=value_type_name)
+        value_types[value_type_name] = value_type
+
+        value_type_2015_name = 'EKR-%s-GOAL-2015' % measuring_rod_code
+        value_type_2015, created_2015 = ValueType.objects.get_or_create(
+            name=value_type_2015_name)
+        value_types[value_type_2015_name] = value_type_2015
+
+        value_type_2027_name = 'EKR-%s-GOAL-2027' % measuring_rod_code
+        value_type_2027, created_2027 = ValueType.objects.get_or_create(
+            name=value_type_2027_name)
+        value_types[value_type_2027_name] = value_type_2027
+
+        return (value_type if created else None,
+                value_type_2015 if created_2015 else None,
+                value_type_2027 if created_2027 else None)
+
+    def update_area_value(score):
+        """
+        Make AreaValue from score.
+        A score is associated with an (krw) area.
+        """
+        logger.debug('Updating for score: %s' % score)
+        measuring_rod_code = score.measuring_rod.code
+
+        value_type_2015 = value_types['EKR-%s-GOAL-2015' % measuring_rod_code]
+        area_value_2015, created_2015 = AreaValue.objects.get_or_create(
+            area=score.area, value_type=value_type_2015,
+            defaults={'comment': score.target_2015})
+        if not created_2015:
+            area_value_2015.comment = score.target_2015
+            area_value_2015.save()
+
+        value_type_2027 = value_types['EKR-%s-GOAL-2027' % measuring_rod_code]
+        area_value_2027, created_2027 = AreaValue.objects.get_or_create(
+            area=score.area, value_type=value_type_2027,
+            defaults={'comment': score.target_2027})
+        if not created_2027:
+            area_value_2027.comment = score.target_2027
+            area_value_2027.save()
+
+        return (area_value_2015 if created_2015 else None,
+                area_value_2027 if created_2027 else None)
+
+    logger = logging.getLogger(taskname)
+
+    logger.info('Updating AreaValue EKR goalscores')
+
+    measuring_rod_codes = ['VIS', 'FYTOPL', 'MAFAUNA', 'OVWFLORA']
+    scores = Score.objects.filter(
+        measuring_rod__code__in=measuring_rod_codes)
+
+    value_types = {}
+    result = map(update_value_types, measuring_rod_codes)
+    result_created = filter(None, list(itertools.chain(*result)))
+    if result_created:
+        logger.info(
+            'Created ValueType(s): %r' % result_created)
+
+    logger.info('Updating area values for %d scores...' % len(scores))
+    result = map(update_area_value, scores)
+    result_list = list(itertools.chain(*result))
+    logger.info('Updated %d AreaValues.' % len(result_list))
+    result_created = filter(None, result_list)
+    if result_created:
+        logger.info('Created AreaValues:')
+        for area_value in result_created:
+            logger.info(' %s' % area_value)
+
+    logger.info('Finished.')
 
 
 @task
@@ -201,7 +289,7 @@ def sync_esf(username=None, taskname=None):
 
     # Actual code to do the task
     logger.info('sync_esf')
-    logger.info('TODO')
+    logger.info('DELETE ME')
 
     # Remove logging handler
     logger.removeHandler(handler)

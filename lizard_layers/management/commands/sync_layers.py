@@ -8,7 +8,7 @@ from django.db import transaction
 from django.core.management.base import BaseCommand
 
 from lizard_layers.tasks import sync_ekr
-from lizard_layers.tasks import sync_esf
+from lizard_layers.tasks import sync_ekr_goals
 
 import logging
 logger = logging.getLogger(__name__)
@@ -21,5 +21,5 @@ class Command(BaseCommand):
 
     @transaction.commit_on_success
     def handle(self, *args, **options):
-        sync_ekr(taskname=options.get('taskname', None))
-        sync_esf(taskname=options.get('taskname', None))
+        sync_ekr(taskname=options.get('taskname', None), loglevel=10)
+        sync_ekr_goals(taskname=options.get('taskname', None), loglevel=10)

@@ -1,5 +1,10 @@
 <table class="lizard">
   <tbody>
+    <tr>
+    {% for field in view.table_header %}
+      <td>{{ field }}</td>
+    {% endfor %}
+    </tr>
     {% for row in view.values %}
     <tr>
       {% for field in row %}
