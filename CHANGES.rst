@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.7 (unreleased)
+0.7 (2012-05-30)
 ----------------
 
 - Added task sync_ekr_goals, updated management command sync_layers
