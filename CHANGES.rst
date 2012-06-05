@@ -5,7 +5,7 @@ Changelog of lizard-layers
 0.9 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added field AreaValue.object_information and migration.
 
 
 0.8 (2012-05-30)

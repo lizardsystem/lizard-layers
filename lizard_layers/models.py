@@ -108,6 +108,10 @@ class AreaValue(models.Model):
         blank=True,
         verbose_name=_('Timestamp'),
     )
+    object_information = models.TextField(
+        null=True,
+        blank=True,
+        help_text='Extra information about the originating related object.')
 
     class Meta:
         verbose_name = _('Area value')
