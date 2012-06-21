@@ -2,8 +2,8 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.10 (unreleased)
------------------
+0.9.1 (2012-06-21)
+------------------
 
 - Add object_information when updating area_values.
 
