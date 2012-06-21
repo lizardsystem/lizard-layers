@@ -22,6 +22,7 @@ def update_area_value(area, value, value_type,
         area=area,
         value_type=value_type,
     )
+    area_value.object_information = unicode(area)
     area_value.value = value
     area_value.flag = flag
     area_value.comment = comment
