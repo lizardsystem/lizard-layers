@@ -2,7 +2,7 @@ Changelog of lizard-layers
 ===================================================
 
 
-0.9.2 (unreleased)
+0.9.2 (2012-06-25)
 ------------------
 
 - Rename management command for clarity
