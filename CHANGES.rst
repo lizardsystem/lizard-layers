@@ -5,7 +5,9 @@ Changelog of lizard-layers
 0.9.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Rename management command for clarity
+
+- Remove redundant task
 
 
 0.9.1 (2012-06-21)

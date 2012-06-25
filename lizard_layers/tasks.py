@@ -278,21 +278,3 @@ def sync_ekr_goals(username=None, taskname=None, loglevel=20):
             logger.info(' %s' % area_value)
 
     logger.info('Finished.')
-
-
-@task
-def sync_esf(username=None, taskname=None):
-    # Set up logging
-    handler = get_handler(username=username, taskname=taskname)
-    #logger = logging.getLogger(taskname or __name__)
-    logger.addHandler(handler)
-    logger.setLevel(20)
-
-    # Actual code to do the task
-    logger.info('sync_esf')
-    logger.info('DELETE ME')
-
-    # Remove logging handler
-    logger.removeHandler(handler)
-
-    return 'TODO'
